@@ -6,11 +6,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { XIcon } from 'lucide-react'
 
+interface FormDataType {
+    person_age: string;
+    person_income: string;
+    person_home_ownership: string;
+    person_emp_length: string;
+    cb_person_cred_hist_length: string;
+    cb_person_default_on_file: string;
+    loan_intent: string;
+    loan_grade: string;
+    loan_amnt: string;
+    loan_int_rate: string;
+    loan_percent_income: string;
+}
+
 const CreditRiskForm = () => {
     const [loading, setLoading] = useState<boolean>(false)
-    const [creditRisk, setCreditRisk] = useState(null);
-    const dialogRef = useRef<any>(null)
-    const [formData, setFormData] = useState<any>({
+    const [creditRisk, setCreditRisk] = useState<null | 0 | 1>(null);
+    const dialogRef = useRef<HTMLDialogElement | null>(null)
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [formData, setFormData] = useState<FormDataType>({
         person_age: "",
         person_income: "",
         person_home_ownership: "",
@@ -24,7 +39,7 @@ const CreditRiskForm = () => {
         loan_percent_income: ""
     })
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
@@ -43,7 +58,7 @@ const CreditRiskForm = () => {
                 },
                 body: JSON.stringify({
                     ...formData,
-                    loan_percent_income: formData.loan_percent_income / 100
+                    loan_percent_income: parseFloat(formData.loan_percent_income) / 100
                 })
             });
 
@@ -56,11 +71,12 @@ const CreditRiskForm = () => {
             }
         } catch (error) {
             alert("An error occurred while submitting the form.");
+            console.log(error)
             setLoading(false)
         }
     };
 
-    const GenerateRandomSequence = () => {
+    const GenerateRandomSequence = () : string => {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         let result = '';
         for (let i = 0; i < 6; i++) {
@@ -83,6 +99,8 @@ const CreditRiskForm = () => {
             loan_int_rate: "",
             loan_percent_income: ""
         })
+
+        setIsDialogOpen(false)
     }
 
     return (
@@ -196,7 +214,7 @@ const CreditRiskForm = () => {
                     </div>
                 </div>
             </section>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger>
                     <div className='my-3 bg-gradient-to-r from-slate-700 to-slate-400 px-3 py-1 rounded-md text-white' onClick={handleSubmit}>{loading ? 'Please Wait...' : 'Submit Application'}</div>
                 </DialogTrigger>
