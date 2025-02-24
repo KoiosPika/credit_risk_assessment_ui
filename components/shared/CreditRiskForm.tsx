@@ -5,8 +5,9 @@ import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { XIcon } from 'lucide-react'
+import { getCreditRisk } from '@/lib/actions/actions'
 
-interface FormDataType {
+export interface FormDataType {
     person_age: string;
     person_income: string;
     person_home_ownership: string;
@@ -51,19 +52,9 @@ const CreditRiskForm = () => {
     const handleSubmit = async () => {
         try {
             setLoading(true)
-            const response = await fetch("http://3.139.132.70:5000/predict", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    ...formData,
-                    loan_percent_income: parseFloat(formData.loan_percent_income) / 100
-                })
-            });
+            const response = await getCreditRisk(formData)
 
-            const data = await response.json();
-            setCreditRisk(data.credit_risk);
+            setCreditRisk(response.credit_risk);
             setLoading(false);
 
             if (dialogRef.current) {
