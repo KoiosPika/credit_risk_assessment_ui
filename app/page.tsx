@@ -1,5 +1,4 @@
 import CreditRiskForm from "@/components/shared/CreditRiskForm";
-import Image from "next/image";
 
 export default function Home() {
   return (

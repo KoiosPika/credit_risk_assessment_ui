@@ -3,16 +3,13 @@
 import React, { useRef, useState } from 'react'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Button } from '../ui/button'
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { XIcon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 
 const CreditRiskForm = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [creditRisk, setCreditRisk] = useState(null);
     const dialogRef = useRef<any>(null)
-    const router = useRouter()
     const [formData, setFormData] = useState<any>({
         person_age: "",
         person_income: "",
